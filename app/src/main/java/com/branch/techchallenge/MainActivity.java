@@ -64,21 +64,22 @@ public class MainActivity extends AppCompatActivity {
         public void onInitFinished(JSONObject linkProperties, BranchError error) {
             // do stuff with deep link data (nav to page, display content, etc)
             Log.d("Branch","onInitFinished");
-
             /*
                 Once the Branch SDK initialized successfully,
                 lead to OtherActivity.class if linkProperties key=deep_link_test & value contains "other".
              */
-            try {
-                String testParam = linkProperties.getString("deep_link_test");
-                if (testParam.contains("other")) {
-                    Intent intent = new Intent(MainActivity.this, OtherActivity.class);
-                    startActivity(intent);
-                    finish();
+            if (error == null) {
+                try {
+                    String testParam = linkProperties.getString("deep_link_test");
+                    if (testParam.contains("other")) {
+                        Intent intent = new Intent(MainActivity.this, OtherActivity.class);
+                        startActivity(intent);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-            } catch (Exception e) {
+            } else {
                 Log.d("Branch","Branch Err:" + error.getMessage());
-                e.printStackTrace();
             }
         }
     };
